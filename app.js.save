@@ -33,12 +33,13 @@ switch (urlObj.pathname){
 });
 
 function schedule(queryObj,res) {
+
 	if (availableTimes[queryObj.day].some(element =>  element  == queryObj.time)) {
 
-		availableTimes[queryObj.day] = availableTimes[queryObj.day].filter(element => element !== queryObj.time);
-
+		availableTimes[queryObj.day] = availableTimes[queryObj.day].filter(element => !== queryObj.time);
+		
 		appointments.push({ name: queryObj.name, day: queryObj.day, time: queryObj.time });
-
+		
 		res.writeHead(200, {'Content-Type': 'text/plain'});
 		res.write("scheduled"); //write (send) a response to the client when an appointment is scheduled
 		res.end();
@@ -48,31 +49,13 @@ function schedule(queryObj,res) {
 }
 
 function cancel(queryObj, res) {
-
+	let 
 }
 
 function error(status, message, res){
-	let removed = false; 
-	for (let i = 0; i < appointments.length; i++) {
-		let app = appointments[i];
-	
-		if (app.name === queryObj.name && app.day === queryObj.day && app.time === queryObj.time) {
-			appointments.splice(i, 1);
-			
-			if (availableTimes[queryObj.day]) {
-				availableTimes[queryObj.day].push(queryObj.time);
-			}
-			removed = false;
 
-			break;
-		}
-	}
-
-	if (removed) {
-		res.writeHead(200, {'Content-Type': 'text/plain'});
-		res.write("Appiointment has been canceled"); //write (send) a response to the client
-		res.end();
-	} else {
-		error(404, "Appointment not found", res);
+	res.writeHead(200, {'Content-Type': 'text/plain'});
+	res.write(message); //write (send) a response to the client
+	res.end();
 }
 myserver.listen(80, function(){console.log("listening on port 80")});
