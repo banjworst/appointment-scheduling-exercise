@@ -44,7 +44,7 @@ function schedule(queryObj,res) {
 		res.end();
 	}
 	else
-		error(400, "can't schedule", message);
+		error(400, "can't schedule", res);
 }
 
 function cancel(queryObj, res) {
@@ -58,9 +58,8 @@ function cancel(queryObj, res) {
                         if (availableTimes[queryObj.day]) {
                                 availableTimes[queryObj.day].push(queryObj.time);
                         }
-                        removed = false;
+                        removed = true;
 
-                        break;
                 }
         }
 
@@ -70,7 +69,7 @@ function cancel(queryObj, res) {
                 res.end();
         } else {
                 error(404, "Appointment not found", res);
-
+	}
 }
 
 function check(queryObj, res) {
@@ -82,12 +81,16 @@ function check(queryObj, res) {
 	if (availableTimes[queryObj.day] && availableTimes[queryObj.day].includes(queryObj.time)) {
 		sendResponse(200, "Time is available", res);
 	} else {
-		sendResponse(200, "Time is NOT AVAILABLE", res0;
+		sendResponse(200, "Time is NOT AVAILABLE", res);
 	}
-		break;
 }
 
-function error(status, message, res){
+function error(status, message, res) {
+	res.writeHead(status, { "Content-Type": "text/plain" });
+	res.write("Error: " + message);
+	res.end();
+	
+	}
 
 
 }
