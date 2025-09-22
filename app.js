@@ -48,31 +48,49 @@ function schedule(queryObj,res) {
 }
 
 function cancel(queryObj, res) {
+	let removed = false; 
+        for (let i = 0; i < appointments.length; i++) {
+                let app = appointments[i];
+        
+                if (app.name === queryObj.name && app.day === queryObj.day && app.time === queryObj.time) {
+                        appointments.splice(i, 1);
+                        
+                        if (availableTimes[queryObj.day]) {
+                                availableTimes[queryObj.day].push(queryObj.time);
+                        }
+                        removed = false;
 
+                        break;
+                }
+        }
+
+        if (removed) {
+                res.writeHead(200, {'Content-Type': 'text/plain'});
+                res.write("Appiointment has been canceled"); //write (send) a response to the client
+                res.end();
+        } else {
+                error(404, "Appointment not found", res);
+
+}
+
+function check(queryObj, res) {
+	if (!queryObj.day || !queryObj.time) {
+		error(400, "Missing day or time in request", res);
+		return;
+	}
+
+	if (availableTimes[queryObj.day] && availableTimes[queryObj.day].includes(queryObj.time)) {
+		sendResponse(200, "Time is available", res);
+	} else {
+		sendResponse(200, "Time is NOT AVAILABLE", res0;
+	}
+		break;
 }
 
 function error(status, message, res){
-	let removed = false; 
-	for (let i = 0; i < appointments.length; i++) {
-		let app = appointments[i];
-	
-		if (app.name === queryObj.name && app.day === queryObj.day && app.time === queryObj.time) {
-			appointments.splice(i, 1);
-			
-			if (availableTimes[queryObj.day]) {
-				availableTimes[queryObj.day].push(queryObj.time);
-			}
-			removed = false;
 
-			break;
-		}
-	}
 
-	if (removed) {
-		res.writeHead(200, {'Content-Type': 'text/plain'});
-		res.write("Appiointment has been canceled"); //write (send) a response to the client
-		res.end();
-	} else {
-		error(404, "Appointment not found", res);
 }
+
+
 myserver.listen(80, function(){console.log("listening on port 80")});
