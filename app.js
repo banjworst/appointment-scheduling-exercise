@@ -22,7 +22,7 @@ switch (urlObj.pathname){
 		schedule(urlObj.query,res);
 		break;
 	case "/cancel":
-		cancel();
+		cancel(urlObj.query, res);
 		break;
 	default:
 		error(404, "pathname not found", res);
